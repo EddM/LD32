@@ -36,11 +36,11 @@ end
 
 task :ocra do
   cmd = [
-    "ocra play.rb",
-    "--add-all-core",
-    "--gemfile Gemfile",
-    "--no-enc",
-    "--icon res/Icon.ico"
+    "ocra play.rb"#,
+    # "--add-all-core",
+    # "--gemfile Gemfile",
+    # "--no-enc",
+    # "--icon res/Icon.ico"
   ]
 
   `#{cmd.join(" ")}`
