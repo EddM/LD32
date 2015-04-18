@@ -5,7 +5,7 @@ class Player < Entity
 
   def initialize(level, x, y)
     super(level, x, y, 54, 92)
-
+    @facing = :left
     @images = Gosu::Image.load_tiles($window, "res/robbie.png", 64, 92, false)
   end
 
@@ -71,12 +71,12 @@ class Player < Entity
   end
 
   def sprite_index
-    timing_offset = Gosu.milliseconds % 1000
+    timing_offset = (Gosu.milliseconds - @level.song_began_at) % 800
 
     if @facing == :left
-      !@moving && !@jumping && timing_offset > 250 && timing_offset < 500 ? 5 : 4
+      !@moving && !@jumping && timing_offset > 0 && timing_offset < 200 ? 5 : 4
     elsif @facing == :right
-      !@moving && !@jumping && timing_offset > 250 && timing_offset < 500 ? 3 : 2
+      !@moving && !@jumping && timing_offset > 0 && timing_offset < 200 ? 3 : 2
     else
       0
     end

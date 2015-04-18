@@ -17,6 +17,8 @@ require "./lib/enemy.rb"
 Dir["./lib/enemies/*.rb"].each { |file| require file }
 require "./lib/player.rb"
 
+require "./lib/fireball.rb"
+
 require "./lib/tileset.rb"
 require "./lib/tile.rb"
 Dir["./lib/tiles/*.rb"].each { |file| require file }

@@ -23,6 +23,6 @@ class Tile < Entity
   end
 
   def draw
-    image.draw x, y, Z::Objects
+    image.draw x, y, Z::Object
   end
 end

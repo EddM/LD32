@@ -5,13 +5,16 @@ class SpiderEnemy < Enemy
     super(level, x, y - 144, 78, 144)
     @images = Gosu::Image.load_tiles($window, "res/spider.png", 78, 144, false)
     @base_x = x
+    @last_fired_projectile_at = 0
   end
 
   def update
     super
 
+    fire! if (Gosu.milliseconds - @last_fired_projectile_at) > 1000 && rand > 0.90
+
     if !@moving
-      @moving = [:left, :right].sample if rand > 0.95
+      @moving = [:left, :right].sample
     else
       move
     end
@@ -19,6 +22,17 @@ class SpiderEnemy < Enemy
 
   def draw
     @images[sprite_index].draw x, y, Z::Enemy
+    super
+  end
+
+  def fire!
+    @last_fired_projectile_at = Gosu.milliseconds
+
+    if @facing == :left
+      projectiles << Fireball.new(self, x, y + 70, :left)
+    else
+      projectiles << Fireball.new(self, right, y + 70, :right)
+    end
   end
 
   private

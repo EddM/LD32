@@ -1,5 +1,6 @@
 {
   "name" : "Factory",
   "layout" : "factory.map",
-  "background" : "bricks.png"
+  "background" : "bricks.png",
+  "music" : "song1.mp3"
 }

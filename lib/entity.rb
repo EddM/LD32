@@ -3,10 +3,11 @@ require "./lib/traits/affected_by_gravity"
 class Entity
   include Geometry
 
-  attr_reader :speed
+  attr_reader :speed, :projectiles
 
   def initialize(level, x, y, width, height)
     @level, @x, @y, @width, @height = level, x, y, width, height
+    @projectiles = []
   end
 
   def update

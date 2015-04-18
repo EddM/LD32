@@ -1,7 +1,7 @@
 require "json"
 
 class Level
-  attr_reader :tiles, :enemies
+  attr_reader :tiles, :enemies, :song_began_at
 
   def initialize(name)
     @player = Player.new(self, 0, 650)
@@ -12,6 +12,10 @@ class Level
     @layout = File.open(layout_filename).read.split("\n").map { |row| row.split("") }
     build_layout
     @background = Gosu::Image.new($window, "res/backgrounds/#{@json_data["background"]}", false)
+
+    @song = Gosu::Song.new($window, "res/music/song1.ogg")
+    @song_began_at = Gosu.milliseconds
+    # @song.play(true)
   end
 
   def height_in_tiles
