@@ -27,6 +27,7 @@ class SpiderEnemy < Enemy
 
   def fire!
     @last_fired_projectile_at = Gosu.milliseconds
+    @emitter.play! :shoot, 700
 
     if @facing == :left
       projectiles << Fireball.new(self, x, y + 70, :left)

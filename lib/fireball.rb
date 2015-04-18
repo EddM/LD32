@@ -6,6 +6,7 @@ class Fireball
 
   def initialize(parent, x, y, direction = :left)
     @parent, @x, @y, @direction = parent, x, y, direction
+    @width, @height = Width, Height
     @lifespan = [300, 350, 400].sample
     @images = Gosu::Image.load_tiles($window, "res/fireball.png", Width, Height, false)
   end

@@ -1,0 +1,6 @@
+{
+  "name" : "Forest",
+  "layout" : "forest.map",
+  "background" : "trees.png",
+  "music" : "song2.mp3"
+}

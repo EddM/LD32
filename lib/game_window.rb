@@ -11,6 +11,8 @@ class GameWindow < Gosu::Window
     $window = self
     self.caption = "Hi"
 
+    SoundBank.setup
+
     @state_manager = GameStateManager.new
     @state_manager << GameplayState.new
 

@@ -8,7 +8,13 @@ Dir["./lib/game_states/*.rb"].each { |file| require file }
 require "./lib/z.rb"
 require "./lib/geometry.rb"
 
+require "./lib/audio/audio_clock.rb"
+require "./lib/audio/sound_bank.rb"
+require "./lib/audio/sound_emitter.rb"
+
 require "./lib/level.rb"
+
+require "./lib/timing_indicator.rb"
 
 Dir["./lib/traits/*.rb"].each { |file| require file }
 

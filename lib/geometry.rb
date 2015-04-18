@@ -5,6 +5,10 @@ module Geometry
     end
   end
   
+  def distance_to(ent)
+    distance_to_point(ent.mid_point_x, ent.mid_point_y)
+  end
+
   def distance_to_point(px, py)
     Gosu.distance(mid_point_x, mid_point_y, px, py)
   end

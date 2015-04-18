@@ -1,9 +1,11 @@
 require "json"
 
 class Level
-  attr_reader :tiles, :enemies, :song_began_at
+  attr_reader :player, :tiles, :enemies, :clock
 
   def initialize(name)
+    @clock = AudioClock.new
+
     @player = Player.new(self, 0, 650)
     @camera = [0, 0]
     filename = "res/levels/#{name}.json"
@@ -13,9 +15,7 @@ class Level
     build_layout
     @background = Gosu::Image.new($window, "res/backgrounds/#{@json_data["background"]}", false)
 
-    @song = Gosu::Song.new($window, "res/music/song1.ogg")
-    @song_began_at = Gosu.milliseconds
-    # @song.play(true)
+    @indicator = TimingIndicator.new(self)
   end
 
   def height_in_tiles
@@ -35,12 +35,19 @@ class Level
   end
 
   def update
+    @indicator.update
     @player.update
     @enemies.each(&:update)
 
     @camera = [
       [[@player.x - (GameWindow::Width / 2), 0].max, width - GameWindow::Width].min,
       [[@player.y - (GameWindow::Height / 2), 0].max, (height - GameWindow::Height)].min]
+
+    if !@song
+      @song = Gosu::Song.new($window, "res/music/song1.ogg")
+      @song.play(true)
+      @clock.start(Gosu.milliseconds - 350)
+    end
   end
 
   def draw
@@ -49,6 +56,8 @@ class Level
       @enemies.each(&:draw)
       @player.draw
     end
+
+    @indicator.draw
 
     @background.draw parallax_offset(@background.width, GameWindow::Width, width, @camera[0]),
                      parallax_offset(@background.height, GameWindow::Height, height, @camera[1]),

@@ -1,7 +1,8 @@
 class Player < Entity
   include AffectedByGravity
 
-  JumpMax = 200
+  InvincibilityTime = 2500
+  JumpMax = 100
 
   def initialize(level, x, y)
     super(level, x, y, 54, 92)
@@ -18,14 +19,14 @@ class Player < Entity
       @y -= jumping_speed
       @jump += jumping_speed
 
-      if @jump >= JumpMax
+      if @jump >= JumpMax || !fits_top?
         @jump = nil
       end
     end
   end
 
   def draw
-    @images[sprite_index].draw x, y, Z::Player
+    @images[sprite_index].draw x, y, Z::Player, 1, 1, Gosu::Color.argb(invincible? ? 100 : 255, 255, 255, 255)
   end
 
   def move
@@ -45,11 +46,6 @@ class Player < Entity
     end
     
     jump! if $window.button_down?(Gosu::KbW)
-
-    # if $window.button_down?(Gosu::KbS)
-    #   @facing = :down
-    #   @y += speed
-    # end
   end
 
   def jump!
@@ -62,21 +58,25 @@ class Player < Entity
 
   def check_entity_collisions
     damage! if @level.enemies.any? do |enemy|
-      enemy.intersects? self
+      enemy.intersects?(self) ||
+      enemy.projectiles.any? { |projectile| projectile.intersects?(self) }
     end
   end
 
   def damage!
-    puts "ouch"
+    unless invincible?
+      SoundBank.current.play! :hurt
+      @invincible_until = Gosu.milliseconds + InvincibilityTime
+    end
   end
 
   def sprite_index
-    timing_offset = (Gosu.milliseconds - @level.song_began_at) % 800
+    timing_offset = Gosu.milliseconds % AudioClock::BeatLength
 
     if @facing == :left
-      !@moving && !@jumping && timing_offset > 0 && timing_offset < 200 ? 5 : 4
+      !@moving && !@jumping && timing_offset > 50 && timing_offset < 200 ? 5 : 4
     elsif @facing == :right
-      !@moving && !@jumping && timing_offset > 0 && timing_offset < 200 ? 3 : 2
+      !@moving && !@jumping && timing_offset > 50 && timing_offset < 200 ? 3 : 2
     else
       0
     end
@@ -88,5 +88,9 @@ class Player < Entity
 
   def jumping_speed
     8
+  end
+
+  def invincible?
+    @invincible_until && @invincible_until > Gosu.milliseconds
   end
 end

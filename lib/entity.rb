@@ -8,6 +8,7 @@ class Entity
   def initialize(level, x, y, width, height)
     @level, @x, @y, @width, @height = level, x, y, width, height
     @projectiles = []
+    @emitter = SoundEmitter.new(self, @level.player)
   end
 
   def update
@@ -43,7 +44,8 @@ class Entity
   def tile_above?
     @level.tiles.any? do |tile|
       ((tile.x <= x && tile.right >= x) || (tile.x <= right && tile.right >= right)) &&
-        tile.bottom == (y - 1)
+        tile.bottom <= (y - 1) &&
+        tile.bottom >= (y - 10)
     end
   end
   
@@ -69,7 +71,7 @@ class Entity
     @level.tiles.any? do |tile|
       ((tile.x <= x && tile.right >= x) || (tile.x <= right && tile.right >= right)) &&
         tile.y >= (bottom + 1) &&
-        tile.y <= (bottom + 5)
+        tile.y <= (bottom + 10)
     end
   end
 end
