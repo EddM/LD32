@@ -1,10 +1,22 @@
 class Player < Entity
-  def initialize(x, y)
-    super(x, y, 64, 92)
+  JumpMax = 100
+
+  def initialize(level, x, y)
+    super(level, x, y, 64, 92)
   end
 
   def update
     move
+    apply_gravity
+
+    if @jump
+      @y -= jumping_speed
+      @jump += jumping_speed
+
+      if @jump >= JumpMax
+        @jump = nil
+      end
+    end
   end
 
   def draw
@@ -23,7 +35,7 @@ class Player < Entity
     end
     
     jump! if $window.button_down?(Gosu::KbW)
-    
+
     # if $window.button_down?(Gosu::KbS)
     #   @facing = :down
     #   @y += speed
@@ -31,7 +43,9 @@ class Player < Entity
   end
 
   def jump!
-    @y -= jumping_speed
+    if !@jump && tile_below?
+      @jump = 0
+    end
   end
 
   private

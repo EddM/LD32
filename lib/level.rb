@@ -1,8 +1,10 @@
 require "json"
 
 class Level
+  attr_reader :tiles
+
   def initialize(name)
-    @player = Player.new(0, 700)
+    @player = Player.new(self, 0, 650)
     @camera = [0, 0]
     filename = "res/levels/#{name}.json"
     @json_data = JSON.parse File.open(filename).read

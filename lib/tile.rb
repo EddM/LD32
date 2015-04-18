@@ -1,4 +1,4 @@
-class Tile
+class Tile < Entity
   attr_reader :x, :y, :variants
 
   Classes = {
@@ -9,6 +9,7 @@ class Tile
 
   def initialize(x, y, tileset = Tileset.default)
     @x, @y, @tileset = x, y, tileset
+    @width, @height = Size, Size
   end
 
   def randomize_variant!
@@ -20,9 +21,6 @@ class Tile
   end
 
   def draw
-    puts x
-    puts y
-    puts "*"
     image.draw x, y, Z::Objects
   end
 end
