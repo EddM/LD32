@@ -1,7 +1,7 @@
 require "json"
 
 class Level
-  attr_reader :tiles
+  attr_reader :tiles, :enemies
 
   def initialize(name)
     @player = Player.new(self, 0, 650)
@@ -32,6 +32,7 @@ class Level
 
   def update
     @player.update
+    @enemies.each(&:update)
 
     @camera = [
       [[@player.x - (GameWindow::Width / 2), 0].max, width - GameWindow::Width].min,
@@ -41,6 +42,7 @@ class Level
   def draw
     $window.translate(-@camera[0], -@camera[1]) do
       @tiles.each(&:draw)
+      @enemies.each(&:draw)
       @player.draw
     end
 
@@ -57,20 +59,27 @@ class Level
 
   def build_layout
     @tiles = []
+    @enemies = []
 
     @layout.each_with_index do |row, i|
-      draw_row(row, i)
+      build_row(row, i)
     end
 
     @tiles = @tiles.flatten.compact
   end
 
-  def draw_row(row, y)
+  def build_row(row, y)
     @tiles << row.each_with_index.map do |tile_sym, x|
       if klass = Tile::Classes[tile_sym]
         tile = Object.const_get(klass).new(x * Tile::Size, y * Tile::Size)
         tile.randomize_variant! if tile.variants && tile.variants > 0
         tile
+      end
+    end
+
+    row.each_with_index do |tile_sym, x|
+      if tile_sym == "1"
+        @enemies << SpiderEnemy.new(self, x * Tile::Size, y * Tile::Size)
       end
     end
   end

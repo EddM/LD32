@@ -1,26 +1,12 @@
 require "./lib/traits/affected_by_gravity"
 
 class Entity
-  attr_reader :width, :height, :x, :y, :speed
+  include Geometry
+
+  attr_reader :speed
 
   def initialize(level, x, y, width, height)
     @level, @x, @y, @width, @height = level, x, y, width, height
-  end
-
-  def bottom
-    y + height
-  end
-
-  def right
-    x + width
-  end
-
-  def mid_point_x
-    x + (width / 2)
-  end
-  
-  def mid_point_y
-    y + (height / 2)
   end
 
   def update

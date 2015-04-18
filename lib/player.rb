@@ -1,10 +1,10 @@
 class Player < Entity
   include AffectedByGravity
 
-  JumpMax = 140
+  JumpMax = 200
 
   def initialize(level, x, y)
-    super(level, x, y, 64, 92)
+    super(level, x, y, 54, 92)
 
     @images = Gosu::Image.load_tiles($window, "res/robbie.png", 64, 92, false)
   end
@@ -12,6 +12,7 @@ class Player < Entity
   def update
     move
     apply_gravity unless @jump
+    check_entity_collisions
 
     if @jump
       @y -= jumping_speed
@@ -59,6 +60,16 @@ class Player < Entity
 
   private
 
+  def check_entity_collisions
+    damage! if @level.enemies.any? do |enemy|
+      enemy.intersects? self
+    end
+  end
+
+  def damage!
+    puts "ouch"
+  end
+
   def sprite_index
     timing_offset = Gosu.milliseconds % 1000
 
@@ -72,7 +83,7 @@ class Player < Entity
   end
 
   def speed
-    4
+    @jump ? 3 : 4
   end
 
   def jumping_speed
