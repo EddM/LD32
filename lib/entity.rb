@@ -1,7 +1,7 @@
+require "./lib/traits/affected_by_gravity"
+
 class Entity
   attr_reader :width, :height, :x, :y
-
-  GravityFallSpeed = 3
 
   def initialize(level, x, y, width, height)
     @level, @x, @y, @width, @height = level, x, y, width, height
@@ -24,12 +24,6 @@ class Entity
   end
 
   private
-
-  def apply_gravity
-    unless tile_below?
-      @y += GravityFallSpeed
-    end
-  end
 
   def tile_below?
     @level.tiles.any? do |tile|

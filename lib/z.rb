@@ -5,4 +5,6 @@ module Z
 
   Enemy = 4
   Player = 5
+
+  Debug = 9999
 end

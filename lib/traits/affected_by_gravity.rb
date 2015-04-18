@@ -1,5 +1,5 @@
 module AffectedByGravity
-  GravityFallSpeed = 1
+  GravityFallSpeed = 3
 
   def apply_gravity
     unless tile_below?

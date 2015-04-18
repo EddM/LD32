@@ -1,4 +1,6 @@
 class Player < Entity
+  include AffectedByGravity
+
   JumpMax = 100
 
   def initialize(level, x, y)
