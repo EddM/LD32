@@ -1,4 +1,5 @@
 {
   "name" : "Factory",
-  "layout" : "factory.map"
+  "layout" : "factory.map",
+  "background" : "bricks.png"
 }

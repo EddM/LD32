@@ -11,6 +11,7 @@ class Level
     layout_filename = "res/levels/#{@json_data["layout"]}"
     @layout = File.open(layout_filename).read.split("\n").map { |row| row.split("") }
     build_layout
+    @background = Gosu::Image.new($window, "res/backgrounds/#{@json_data["background"]}", false)
   end
 
   def height_in_tiles
@@ -42,9 +43,17 @@ class Level
       @tiles.each(&:draw)
       @player.draw
     end
+
+    @background.draw parallax_offset(@background.width, GameWindow::Width, width, @camera[0]),
+                     parallax_offset(@background.height, GameWindow::Height, height, @camera[1]),
+                     Z::Background
   end
 
   private
+
+  def parallax_offset(max, size, width_or_height, camera_dimension)
+    0 - (max - size).to_f / (100.0 / (100.0 / (width_or_height / camera_dimension.to_f)))
+  end
 
   def build_layout
     @tiles = []
@@ -60,7 +69,7 @@ class Level
     @tiles << row.each_with_index.map do |tile_sym, x|
       if klass = Tile::Classes[tile_sym]
         tile = Object.const_get(klass).new(x * Tile::Size, y * Tile::Size)
-        tile.randomize_variant! if tile.variants.size > 0
+        tile.randomize_variant! if tile.variants && tile.variants > 0
         tile
       end
     end

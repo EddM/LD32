@@ -2,7 +2,9 @@ class Tile < Entity
   attr_reader :x, :y, :variants
 
   Classes = {
-    "_" => :SolidGroundTile
+    "_" => :SolidGroundTile,
+    "#" => :SolidTile,
+    "=" => :SolidFloatingTile
   }
 
   Size = 64

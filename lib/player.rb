@@ -1,15 +1,17 @@
 class Player < Entity
   include AffectedByGravity
 
-  JumpMax = 100
+  JumpMax = 140
 
   def initialize(level, x, y)
     super(level, x, y, 64, 92)
+
+    @images = Gosu::Image.load_tiles($window, "res/robbie.png", 64, 92, false)
   end
 
   def update
     move
-    apply_gravity
+    apply_gravity unless @jump
 
     if @jump
       @y -= jumping_speed
@@ -22,18 +24,23 @@ class Player < Entity
   end
 
   def draw
-    $window.draw_quad x, y, Gosu::Color::AQUA, x + width, y, Gosu::Color::AQUA, x, y + height, Gosu::Color::AQUA, x + width, y + height, Gosu::Color::AQUA
+    @images[sprite_index].draw x, y, Z::Player
   end
 
   def move
+    @moving = nil
+
     if $window.button_down?(Gosu::KbD)
       @facing = :right
-      @x += speed
+      @moving = :right
+      @x += speed if fits_right?
     end
     
     if $window.button_down?(Gosu::KbA)
       @facing = :left
-      @x -= speed
+      @moving = :left
+      @x -= speed if fits_left?
+      @moving = true
     end
     
     jump! if $window.button_down?(Gosu::KbW)
@@ -52,11 +59,23 @@ class Player < Entity
 
   private
 
+  def sprite_index
+    timing_offset = Gosu.milliseconds % 1000
+
+    if @facing == :left
+      !@moving && !@jumping && timing_offset > 250 && timing_offset < 500 ? 5 : 4
+    elsif @facing == :right
+      !@moving && !@jumping && timing_offset > 250 && timing_offset < 500 ? 3 : 2
+    else
+      0
+    end
+  end
+
   def speed
-    3
+    4
   end
 
   def jumping_speed
-    6
+    8
   end
 end
