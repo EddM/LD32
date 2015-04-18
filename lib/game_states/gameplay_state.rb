@@ -1,5 +1,13 @@
 class GameplayState < GameState
   def initialize
-    @player = Player.new
+    @level = Level.new(:factory)
+  end
+
+  def draw
+    @level.draw
+  end
+
+  def update
+    @level.update
   end
 end

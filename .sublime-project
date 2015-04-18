@@ -1,0 +1,9 @@
+{
+  "build_systems":
+      [
+          {
+              "name": "Rake",
+              "cmd": ["rake"]
+          }
+      ]
+}
